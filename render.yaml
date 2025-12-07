@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: rag-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: COHERE_API_KEY
+        sync: false
+      - key: ENVIRONMENT
+        value: production
+      - key: CHROMA_DB_PATH
+        value: /opt/render/project/src/data/chroma_db
+      - key: PDF_UPLOAD_PATH
+        value: /opt/render/project/src/data/pdfs
+      - key: MAX_FILE_SIZE_MB
+        value: 50
+    disk:
+      name: rag-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1

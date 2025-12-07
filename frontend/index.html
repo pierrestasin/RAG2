@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Multi-Model - PDF Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📚 RAG Multi-Model</h1>
+            <p>Upload PDFs and chat with AI (OpenAI, Claude, Gemini)</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Document Management -->
+            <aside class="documents-panel">
+                <h2>Documents</h2>
+
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Drag & drop PDF files here</p>
+                    <p class="upload-hint">or click to browse</p>
+                    <input type="file" id="fileInput" accept=".pdf" multiple hidden>
+                </div>
+
+                <!-- Document List -->
+                <div class="document-list" id="documentList">
+                    <div class="loading" id="docsLoading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Loading documents...</p>
+                    </div>
+                    <div class="empty-state" id="emptyState">
+                        <p>No documents yet</p>
+                        <p>Upload PDFs to get started</p>
+                    </div>
+                </div>
+
+                <!-- Select All Button -->
+                <div class="select-all-container" id="selectAllContainer" style="display: none;">
+                    <button id="selectAllBtn" class="btn-secondary">Select All</button>
+                </div>
+            </aside>
+
+            <!-- Right Panel: Chat Interface -->
+            <main class="chat-panel">
+                <!-- Model Selection -->
+                <div class="model-selector">
+                    <label for="modelSelect">AI Model:</label>
+                    <select id="modelSelect">
+                        <option value="">Loading models...</option>
+                    </select>
+                </div>
+
+                <!-- Chat History -->
+                <div class="chat-history" id="chatHistory">
+                    <div class="welcome-message">
+                        <h2>Welcome to RAG Multi-Model</h2>
+                        <p>Upload PDF documents and ask questions about them using the latest AI models.</p>
+                        <div class="features">
+                            <div class="feature">
+                                <span>📄</span>
+                                <p>Upload multiple PDFs</p>
+                            </div>
+                            <div class="feature">
+                                <span>🔍</span>
+                                <p>Semantic search</p>
+                            </div>
+                            <div class="feature">
+                                <span>🤖</span>
+                                <p>Multi-model support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form class="chat-input" id="chatForm">
+                    <input
+                        type="text"
+                        id="questionInput"
+                        placeholder="Ask a question about your documents..."
+                        autocomplete="off"
+                        disabled
+                    >
+                    <button type="submit" id="sendBtn" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <script src="app.js?v=2.1"></script>
+</body>
+</html>

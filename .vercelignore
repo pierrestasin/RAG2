@@ -1,6 +1,0 @@
-# Ignore backend files so Vercel treats this as a static site
-pdf_analyzer_backend.py
-requirements.txt
-Procfile
-pdf-analyzer-gemini.zip
-DEMARRAGE_RAPIDE.txt

@@ -1,343 +1,293 @@
-# 📚 Analyseur de Documents Scientifiques - Gemini AI
+# 📚 RAG Multi-Model Application
 
-Application web complète pour analyser des documents PDF longs (200-300+ pages) avec l'intelligence artificielle Gemini 1.5 Pro.
+Application RAG (Retrieval-Augmented Generation) professionnelle avec support multi-modèles (OpenAI, Claude, Gemini).
 
-## ✨ Fonctionnalités
+## 🎯 Fonctionnalités
 
-- ✅ Upload multiple de PDFs (jusqu'à 50 documents)
-- ✅ Analyse avec citations de pages automatiques
-- ✅ Interface conversationnelle type ChatGPT
-- ✅ Fenêtre contextuelle massive (1-2M tokens)
-- ✅ **Totalement gratuit** (API Gemini quota gratuit)
+- **Upload de PDFs** : Glissez-déposez vos documents PDF pour les indexer
+- **Recherche sémantique avancée** :
+  - ChromaDB avec embeddings BGE-Large (1024 dimensions)
+  - Réranking intelligent avec Cohere
+  - Cache de requêtes pour performances optimales
+- **Nettoyage intelligent des PDFs scientifiques** :
+  - Filtrage automatique des références bibliographiques
+  - Chunking sémantique par paragraphes
+  - Nettoyage des headers/footers et métadonnées
+  - Idéal pour articles académiques avec beaucoup de citations
+- **Multi-modèles AI** :
+  - OpenAI GPT-4o / GPT-4o Mini
+  - Claude 3.5 Sonnet / Claude 3.5 Haiku
+  - Gemini 2.0 Flash / Gemini Exp 1206
+- **Sélection de documents** : Choisissez sur quels PDFs faire vos recherches
+- **Interface moderne** : UI sombre et responsive
+- **Sources citées** : Chaque réponse inclut les sources avec numéros de pages
 
-## 🚀 Installation rapide (5 minutes)
+## 🏗️ Architecture
 
-### Étape 1 : Prérequis
+```
+RAG/
+├── backend/
+│   ├── main.py              # API FastAPI
+│   ├── llm_service.py       # Service multi-modèles
+│   ├── vector_store.py      # ChromaDB + embeddings
+│   └── pdf_processor.py     # Extraction et chunking
+├── frontend/
+│   ├── index.html           # Interface utilisateur
+│   ├── styles.css           # Design moderne
+│   └── app.js               # Logique frontend
+├── data/
+│   ├── pdfs/                # PDFs uploadés
+│   └── chroma_db/           # Base vectorielle
+├── requirements.txt
+├── .env.example
+└── README.md
+```
 
-Installez Python 3.8+ sur votre ordinateur :
-- **Windows** : https://www.python.org/downloads/
-- **Mac** : `brew install python3`
-- **Linux** : `sudo apt install python3 python3-pip`
+## 🚀 Installation
 
-### Étape 2 : Obtenir votre clé API Gemini (GRATUIT)
-
-1. Allez sur : https://aistudio.google.com/app/apikey
-2. Connectez-vous avec votre compte Google
-3. Cliquez sur "Create API Key"
-4. Copiez la clé (format : `AIzaSy...`)
-
-### Étape 3 : Installation de l'application
+### 1. Cloner le projet
 
 ```bash
-# 1. Créer un dossier pour le projet
-mkdir pdf-analyzer
-cd pdf-analyzer
+git clone <your-repo-url>
+cd RAG
+```
 
-# 2. Télécharger les fichiers
-# Copiez les 3 fichiers fournis :
-# - pdf_analyzer_backend.py
-# - index.html
-# - requirements.txt
+### 2. Créer un environnement virtuel
 
-# 3. Installer les dépendances Python
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Sur Windows: venv\Scripts\activate
+```
+
+### 3. Installer les dépendances
+
+```bash
 pip install -r requirements.txt
-
-# 4. Configurer votre clé API
-# Sur Windows :
-set GEMINI_API_KEY=VOTRE_CLE_ICI
-
-# Sur Mac/Linux :
-export GEMINI_API_KEY=VOTRE_CLE_ICI
 ```
 
-### Étape 4 : Lancer l'application
+### 4. Configurer les clés API
+
+Copiez le fichier `.env.example` vers `.env` :
 
 ```bash
-# 1. Démarrer le serveur backend
-python pdf_analyzer_backend.py
-
-# 2. Dans un autre terminal, démarrer un serveur web pour le frontend
-# Option A - Python 3 :
-python -m http.server 8000
-
-# Option B - Python 2 :
-python -m SimpleHTTPServer 8000
-
-# 3. Ouvrir votre navigateur
-# Allez sur : http://localhost:8000
+cp .env.example .env
 ```
 
-**C'est tout ! L'application est prête 🎉**
+Puis éditez `.env` et ajoutez vos clés API :
 
----
+```env
+# OpenAI API (https://platform.openai.com/api-keys)
+OPENAI_API_KEY=sk-your-key-here
 
-## 📖 Guide d'utilisation
+# Anthropic Claude API (https://console.anthropic.com/)
+ANTHROPIC_API_KEY=sk-ant-your-key-here
 
-### 1. Charger vos documents
-- Glissez-déposez vos PDFs dans la zone de gauche
-- Ou cliquez pour sélectionner des fichiers
-- Cliquez sur "Charger les documents"
-- ⏱️ Temps de chargement : ~10-30 secondes pour 3-4 documents de 200 pages
-
-### 2. Poser des questions
-Exemples de questions efficaces :
-```
-"Quelles sont les principales conclusions de l'étude ?"
-
-"Compare les méthodologies utilisées dans les 3 documents"
-
-"Extrais tous les chiffres et statistiques mentionnés sur le changement climatique"
-
-"Quelle est la position de l'auteur sur [sujet] ? Cite les pages exactes"
-
-"Y a-t-il des contradictions entre les documents sur [point précis] ?"
+# Google Gemini API (https://aistudio.google.com/app/apikey)
+GEMINI_API_KEY=AIzaSy-your-key-here
 ```
 
-### 3. Obtenir des réponses fiables
-L'IA inclut automatiquement :
-- ✅ Citations avec numéros de page
-- ✅ Niveau de confiance (Élevé/Moyen/Faible)
-- ✅ Indication si l'info n'est pas dans les docs
+**Note** : Vous n'avez besoin que des clés API des modèles que vous voulez utiliser. Par exemple, si vous voulez utiliser seulement Gemini, seule la clé `GEMINI_API_KEY` est nécessaire.
 
----
-
-## 💰 Coûts et limites
-
-### Quota GRATUIT de l'API Gemini
-- **15 requêtes par minute** (largement suffisant pour 1 utilisateur)
-- **1 500 requêtes par jour**
-- **1 million de requêtes par mois**
-- Fenêtre contextuelle : **1-2 millions de tokens** (~1 500-3 000 pages)
-
-### Si vous dépassez le quota gratuit
-Passez à l'API payante (très économique) :
-- **Input** : 1,25 $/million de tokens (~0,94 $ par document de 300 pages)
-- **Output** : 5 $/million de tokens
-
-**Exemple concret** : 100 analyses de documents de 300 pages = environ **100 $/mois**
-
----
-
-## 🌐 Déploiement en ligne (pour partager avec d'autres)
-
-### Option 1 : Déploiement gratuit avec Vercel (Frontend) + Render (Backend)
-
-#### Backend sur Render.com (gratuit)
-1. Créez un compte sur https://render.com
-2. Créez un nouveau "Web Service"
-3. Connectez votre dépôt Git (ou uploadez les fichiers)
-4. Configuration :
-   - **Build Command** : `pip install -r requirements.txt`
-   - **Start Command** : `python pdf_analyzer_backend.py`
-   - **Environment Variables** : Ajoutez `GEMINI_API_KEY`
-5. Déployez (3-5 minutes)
-6. Notez l'URL (ex: `https://votre-app.onrender.com`)
-
-#### Frontend sur Vercel (gratuit)
-1. Créez un compte sur https://vercel.com
-2. Uploadez juste le fichier `index.html`
-3. Dans `index.html`, remplacez :
-   ```javascript
-   const API_URL = 'http://localhost:5000';
-   ```
-   par :
-   ```javascript
-   const API_URL = 'https://votre-app.onrender.com';
-   ```
-4. Déployez
-5. Vous obtenez une URL type : `https://votre-app.vercel.app`
-
-**Total : 0 € de coûts d'hébergement !**
-
-### Option 2 : Déploiement sur votre propre serveur
-Si vous avez un VPS ou serveur dédié :
-```bash
-# Installer avec gunicorn pour la production
-pip install gunicorn
-
-# Lancer en production
-gunicorn -w 4 -b 0.0.0.0:5000 pdf_analyzer_backend:app
-```
-
----
-
-## 🔧 Personnalisation avancée
-
-### Ajouter une base vectorielle pour + de 3 000 pages
-
-Si vos documents dépassent 3 000 pages, ajoutez Chroma :
+### 5. Créer les dossiers de données
 
 ```bash
-pip install chromadb sentence-transformers
+mkdir -p data/pdfs data/chroma_db
 ```
 
-Modifiez le backend pour indexer les documents :
-```python
-import chromadb
-from sentence_transformers import SentenceTransformer
+## 🎮 Utilisation
 
-# Initialisation
-client = chromadb.Client()
-collection = client.create_collection("documents")
-embedder = SentenceTransformer('all-MiniLM-L6-v2')
+### Démarrer le backend
 
-# Indexation par chunks
-def chunk_text(text, chunk_size=1000):
-    words = text.split()
-    return [' '.join(words[i:i+chunk_size]) 
-            for i in range(0, len(words), chunk_size)]
-
-chunks = chunk_text(documents_text)
-embeddings = embedder.encode(chunks)
-collection.add(
-    embeddings=embeddings.tolist(),
-    documents=chunks,
-    ids=[f"chunk_{i}" for i in range(len(chunks))]
-)
-
-# Recherche sémantique
-query_embedding = embedder.encode([question])
-results = collection.query(
-    query_embeddings=query_embedding.tolist(),
-    n_results=5
-)
-relevant_context = results['documents']
-```
-
-### Ajouter l'authentification utilisateur
-
-Pour partager avec plusieurs personnes :
 ```bash
-pip install flask-login
+cd backend
+python main.py
 ```
 
-```python
-from flask_login import LoginManager, login_required
+Le serveur démarre sur `http://localhost:8000`
 
+Vous pouvez vérifier que tout fonctionne :
+- API docs : http://localhost:8000/docs
+- Health check : http://localhost:8000/health
+
+### Démarrer le frontend
+
+Ouvrez simplement `frontend/index.html` dans votre navigateur, ou utilisez un serveur local :
+
+```bash
+# Avec Python
+cd frontend
+python3 -m http.server 3000
+
+# Ou avec Node.js
+npx serve frontend
+```
+
+Puis ouvrez http://localhost:3000
+
+### Utilisation de l'interface
+
+1. **Upload des PDFs** : Glissez-déposez vos PDFs dans la zone de gauche
+2. **Sélection** : Cochez les documents sur lesquels vous voulez faire des recherches
+3. **Choix du modèle** : Sélectionnez le modèle AI dans le menu déroulant
+4. **Question** : Tapez votre question dans la zone de chat
+5. **Réponse** : L'assistant répond en citant ses sources
+
+## 📊 Modèles disponibles
+
+| Modèle | Provider | Caractéristiques | Coût |
+|--------|----------|------------------|------|
+| **Gemini 2.0 Flash** | Google | Très rapide, gratuit | Gratuit |
+| **Gemini Exp 1206** | Google | Expérimental, performant | Gratuit |
+| **GPT-4o** | OpenAI | Meilleure qualité | $$$ |
+| **GPT-4o Mini** | OpenAI | Rapide, économique | $ |
+| **Claude 3.5 Sonnet** | Anthropic | Excellent raisonnement | $$ |
+| **Claude 3.5 Haiku** | Anthropic | Rapide, économique | $ |
+
+## 🔧 Configuration avancée
+
+### Variables d'environnement
+
+```env
 # Configuration
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-# Protéger les routes
-@app.route('/analyze', methods=['POST'])
-@login_required
-def analyze():
-    # ... votre code
+ENVIRONMENT=development
+CHROMA_DB_PATH=./data/chroma_db
+PDF_UPLOAD_PATH=./data/pdfs
+MAX_FILE_SIZE_MB=50
 ```
 
----
+### Chunking intelligent (dans pdf_processor.py)
 
-## ❓ FAQ / Résolution de problèmes
+Le système utilise un **chunking sémantique** par paragraphes avec nettoyage automatique :
 
-### L'upload prend trop de temps
-- **Cause** : PDFs très lourds (scans)
-- **Solution** : Compresser les PDFs avec https://www.ilovepdf.com/compress_pdf
-
-### Erreur "CORS policy"
-- **Cause** : Frontend et backend sur des ports différents
-- **Solution** : Déjà configuré avec `flask-cors`, vérifiez que le backend tourne
-
-### "API key not valid"
-- **Cause** : Clé API incorrecte ou non configurée
-- **Solution** : 
-  ```bash
-  # Vérifier la variable d'environnement
-  echo $GEMINI_API_KEY
-  
-  # Si vide, la redéfinir
-  export GEMINI_API_KEY=VOTRE_CLE
-  ```
-
-### Réponses imprécises
-- **Cause** : Question trop vague
-- **Solution** : Posez des questions spécifiques avec contexte
-  - ❌ Mauvais : "Parle-moi de l'étude"
-  - ✅ Bon : "Quels sont les 3 résultats principaux de l'étude sur la page 45-60 ?"
-
-### Quotas dépassés
-- **Cause** : + de 15 requêtes/minute ou 1 500/jour
-- **Solution** : Passer à l'API payante ou attendre la réinitialisation
-
----
-
-## 🎯 Optimisations recommandées
-
-### Pour minimiser les hallucinations
-Ajoutez ce système de scoring dans le prompt :
 ```python
-prompt = f"""
-NIVEAU DE CONFIANCE REQUIS :
-- Élevé : Information explicitement mentionnée avec page exacte
-- Moyen : Information implicite mais déductible logiquement
-- Faible : Inférence basée sur le contexte général
-
-Pour chaque affirmation, indique [CONFIANCE: Élevé/Moyen/Faible]
-
-{votre_prompt_actuel}
-"""
+PDFProcessor(
+    chunk_size=1000,      # Taille max des chunks en caractères
+    chunk_overlap=200     # Overlap entre chunks (dernières phrases)
+)
 ```
 
-### Pour accélérer les réponses
-Limitez la longueur des réponses :
+**Fonctionnalités de nettoyage** :
+- ✅ Détection automatique des sections de références
+- ✅ Filtrage des pages de références (>50% de citations)
+- ✅ Simplification des références inline `[1,2,3,4,5]` → `[citations]`
+- ✅ Suppression des headers/footers
+- ✅ Chunking respectant les limites de paragraphes
+
+📖 Voir [AMELIORATIONS_RAG.md](AMELIORATIONS_RAG.md) pour plus de détails
+
+### Recherche optimisée (dans main.py)
+
+Le système adapte automatiquement le nombre de chunks selon le modèle utilisé :
+
 ```python
-generation_config={
-    'temperature': 0.1,
-    'max_output_tokens': 2048,  # Au lieu de 8192
+search_results = vector_store.search(
+    query=request.question,
+    selected_files=request.selected_files,
+    n_results=10,              # Base (adapté automatiquement)
+    model_name=request.model,  # Détermine l'optimal selon la fenêtre de contexte
+    use_reranking=True         # Active Cohere reranking si disponible
+)
+```
+
+**Optimisations actives** :
+- 🎯 **Adaptation au modèle** : 8-20 chunks selon la fenêtre de contexte (8K-200K tokens)
+- 🔄 **Réranking Cohere** : Améliore la pertinence des résultats de 30-40%
+- ⚡ **Cache de requêtes** : Expire après 1h, réduit les appels API
+- 📊 **Embeddings BGE-Large** : 1024 dimensions vs 384 (MiniLM)
+
+## 📝 API Endpoints
+
+### GET /health
+Vérification du statut de l'API
+
+### GET /documents
+Liste tous les documents indexés
+
+### POST /upload
+Upload et indexation d'un PDF
+- Body : `multipart/form-data` avec fichier PDF
+
+### POST /query
+Interroge les documents
+```json
+{
+  "question": "Quelle est la capitale de la France ?",
+  "model": "gemini",
+  "selected_files": ["doc1.pdf", "doc2.pdf"]
 }
 ```
 
-### Pour économiser les tokens
-Envoyez seulement les sections pertinentes au lieu du document entier :
-```python
-# 1. Première passe : identifier les sections pertinentes
-sections_query = f"Quelles sections du document contiennent des infos sur : {question}"
+### DELETE /documents/{filename}
+Supprime un document
 
-# 2. Seconde passe : analyse approfondie uniquement sur ces sections
+## 🐛 Dépannage
+
+### Erreur : "No module named 'chromadb'"
+```bash
+pip install -r requirements.txt
 ```
 
----
+### Erreur : "API key not found"
+Vérifiez que votre fichier `.env` existe et contient les bonnes clés API.
 
-## 📊 Monitoring et Analytics
+### Erreur : "Failed to connect to server"
+Vérifiez que le backend est bien démarré sur http://localhost:8000
 
-Ajoutez un compteur d'utilisation :
-```python
-import json
-from datetime import datetime
+### Erreur CORS
+Si vous ouvrez directement `index.html` (file://), utilisez un serveur HTTP local.
 
-usage_log = []
+### ChromaDB : "Collection already exists"
+Supprimez le dossier `data/chroma_db` pour réinitialiser la base.
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    start_time = datetime.now()
-    
-    # ... votre code d'analyse
-    
-    usage_log.append({
-        'timestamp': start_time.isoformat(),
-        'question': question,
-        'response_time': (datetime.now() - start_time).seconds,
-        'tokens_used': len(prompt.split())  # Approximation
-    })
-    
-    # Sauvegarder périodiquement
-    with open('usage.json', 'w') as f:
-        json.dump(usage_log, f)
-```
+## 🚀 Déploiement Cloud (à venir)
 
----
+### Backend : Render / Railway / Fly.io
+- Héberge l'API FastAPI
+- Variables d'environnement pour les clés API
+- Stockage persistant pour ChromaDB
 
-## 🆘 Support et Contact
+### Frontend : Vercel / Netlify
+- Déploiement du frontend statique
+- Configuration de l'URL de l'API
 
-- **Documentation Gemini** : https://ai.google.dev/docs
-- **API Limits** : https://ai.google.dev/pricing
-- **Issues** : Créez un ticket sur votre dépôt GitHub
+### Base vectorielle : Pinecone (migration future)
+- Alternative cloud à ChromaDB
+- Gratuit jusqu'à 1M vecteurs
+- Meilleure scalabilité
 
----
+## 📚 Technologies utilisées
+
+- **Backend** : FastAPI, Python 3.11+
+- **Vector DB** : ChromaDB (local), Pinecone (cloud)
+- **Embeddings** : sentence-transformers (BAAI/bge-large-en-v1.5 - 1024D)
+- **Reranking** : Cohere rerank-english-v3.0
+- **PDF** : PyMuPDF (fitz) avec nettoyage intelligent
+- **Cache** : diskcache pour optimisation des requêtes
+- **AI Models** :
+  - OpenAI API (openai)
+  - Anthropic API (anthropic)
+  - Google Gemini API (google-generativeai)
+- **Frontend** : HTML5, CSS3, Vanilla JavaScript
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT - libre d'utilisation, modification et distribution.
+MIT License
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+
+## ⚠️ Sécurité
+
+- **Ne commitez JAMAIS votre fichier `.env`** (déjà dans .gitignore)
+- Utilisez des variables d'environnement pour les clés API en production
+- Limitez la taille des uploads (MAX_FILE_SIZE_MB)
+- Validez les inputs utilisateurs
+
+## 📞 Support
+
+Pour toute question ou problème, ouvrez une issue sur GitHub.
 
 ---
 
-**Créé avec ❤️ pour faciliter l'analyse de documents scientifiques**
+**Fait avec ❤️ en Python & JavaScript**

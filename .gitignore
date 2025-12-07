@@ -1,31 +1,39 @@
-# Environment variables
+# Environment
 .env
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
 .venv/
 venv/
-ENV/
-env/
+__pycache__/
+*.pyc
+
+# Data
+data/pdfs/*
+data/chroma_db/*
+data/query_cache/*
+!data/pdfs/.gitkeep
+!data/chroma_db/.gitkeep
+
+# Backend data
+backend/data/pdfs/*
+backend/data/chroma_db/*
+backend/data/query_cache/*
+!backend/data/pdfs/.gitkeep
+!backend/data/chroma_db/.gitkeep
+
+# Test PDFs
+*.pdf
+
+# Cache
+*.db
+*.db-shm
+*.db-wal
 
 # IDE
 .vscode/
 .idea/
 *.swp
-*.swo
-
-# OS
 .DS_Store
-Thumbs.db
 
-# Logs
-*.log
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
+# Test files with secrets
+backend/test_new_openai_key.py
+backend/diagnose_openai.py
+backend/test_apis.py
