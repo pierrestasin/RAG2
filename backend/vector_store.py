@@ -1,7 +1,7 @@
 """
 Vector Store Service - ChromaDB avec optimisations RAG
 Gestion de la base vectorielle pour le RAG avec:
-- Meilleur modèle d'embedding (BAAI/bge-large-en-v1.5)
+- Modèle d'embedding optimisé (all-MiniLM-L6-v2) pour contraintes RAM
 - Réranking avec Cohere
 - Cache de requêtes
 - Récupération adaptative de chunks
@@ -31,14 +31,14 @@ class VectorStore:
         # Crée nouvelle collection avec bonnes dimensions
         self.collection = self.client.create_collection(
             name="documents",
-            metadata={"description": "RAG documents collection - BGE-Large 1024D"}
+            metadata={"description": "RAG documents collection - MiniLM 384D"}
         )
 
-        # Modèle d'embeddings amélioré (BAAI/bge-large-en-v1.5)
-        # Plus précis que all-MiniLM-L6-v2 (384 → 1024 dimensions)
-        print("🔄 Loading BGE-Large embedding model (1024 dimensions)...")
-        self.embedding_model = SentenceTransformer('BAAI/bge-large-en-v1.5')
-        print("✓ BGE-Large model loaded")
+        # Modèle d'embeddings léger (all-MiniLM-L6-v2)
+        # Optimisé pour Render free tier (512MB RAM)
+        print("🔄 Loading MiniLM embedding model (384 dimensions)...")
+        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        print("✓ MiniLM model loaded (~80MB RAM)")
 
         # Réranker Cohere (optionnel, si clé API disponible)
         self.cohere_client = None
@@ -64,7 +64,7 @@ class VectorStore:
         doc_id = hashlib.md5(filename.encode()).hexdigest()
         ids = [f"{doc_id}_{i}" for i in range(len(chunks))]
 
-        # Génère les embeddings avec BGE-Large
+        # Génère les embeddings
         print(f"🔄 Generating embeddings for {len(chunks)} chunks...")
         embeddings = self.embedding_model.encode(
             chunks,
@@ -164,7 +164,7 @@ class VectorStore:
         # Si réranking activé, récupère plus de chunks pour mieux réranker
         initial_n = optimal_n * 2 if (use_reranking and self.cohere_client) else optimal_n
 
-        # Génère embedding de la question avec BGE-Large
+        # Génère embedding de la question
         query_embedding = self.embedding_model.encode(
             query,
             normalize_embeddings=True
