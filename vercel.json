@@ -1,6 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "echo 'No build needed'",
+  "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "buildCommand": "echo 'No build needed - static files'",
   "outputDirectory": "frontend",
   "routes": [
     {
@@ -20,6 +23,15 @@
     },
     {
       "source": "/app.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/styles.css",
       "headers": [
         {
           "key": "Cache-Control",
