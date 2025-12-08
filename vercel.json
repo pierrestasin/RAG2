@@ -2,14 +2,5 @@
   "version": 2,
   "public": true,
   "buildCommand": "echo 'No build needed - static files'",
-  "outputDirectory": "frontend",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "headers": {
-        "Cache-Control": "public, max-age=0, must-revalidate"
-      }
-    }
-  ]
+  "outputDirectory": "frontend"
 }
