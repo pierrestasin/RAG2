@@ -12,10 +12,10 @@ print(f"🔧 Deployment mode: {DEPLOYMENT_MODE}")
 
 # Import du bon vector store selon le mode
 if DEPLOYMENT_MODE == "local":
-    from backend.vector_store import vector_store
+    from vector_store import vector_store
     print("✓ Using local embeddings (SentenceTransformer)")
 else:
-    from backend.vector_store_light import vector_store
+    from vector_store_light import vector_store
     print("✓ Using cloud embeddings (OpenAI API)")
 
 __all__ = ["vector_store"]
