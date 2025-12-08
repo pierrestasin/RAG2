@@ -2,6 +2,12 @@
 
 Application RAG (Retrieval-Augmented Generation) professionnelle avec support multi-modèles (OpenAI, Claude, Gemini).
 
+## 🌐 Démo Live
+
+- **Backend API**: https://rag2-vbo5.onrender.com
+- **Documentation API**: https://rag2-vbo5.onrender.com/docs
+- **Frontend**: (Déploiement Vercel en cours)
+
 ## 🎯 Fonctionnalités
 
 - **Upload de PDFs** : Glissez-déposez vos documents PDF pour les indexer

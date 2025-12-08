@@ -1,5 +1,7 @@
 // Configuration
-const API_URL = 'http://localhost:8000';
+const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://rag2-vbo5.onrender.com';
 
 // State
 let documents = [];
