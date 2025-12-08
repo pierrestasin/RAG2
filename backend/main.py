@@ -17,7 +17,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'), override=True
 
 # Import des services
 from pdf_processor import pdf_processor
-from vector_store import vector_store
+from config import vector_store  # Import du vector store selon le mode (local ou cloud)
 from llm_service import llm_service
 
 app = FastAPI(
